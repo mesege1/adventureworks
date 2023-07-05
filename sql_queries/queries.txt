@@ -1,0 +1,172 @@
+Question 1
+Create a SQL query that generates a report for HR that includes:
+
+The employee's name (at least first and last).
+The employee's position in the company.
+The employee's email address.
+How many vacation hours the employee has accrued.
+Only employees who have accrued more than a certain number of hours.
+HR may like to change this threshold in the future.
+Human-readable titles and column headers that reflect the chosen threshold.
+They would like to begin by contacting employees who have accrued 40 or more hours of vacation. Create an initial report for this threshold.
+
+select
+    concat(p.firstname,' ',p.lastname) as "Name",
+    e.emailaddress,
+    hr.jobtitle,
+    hr.vacationhours
+from
+    person.person as p
+join person.emailaddress as e on
+    e.businessentityid = p.businessentityid
+join humanresources.employee as hr on
+    p.businessentityid = hr.businessentityid
+where
+    p.persontype in ('SP', 'EM')
+    and hr.vacationhours > 40;
+
+-------------------------------------------------------
+
+Question 2
+HR would also be interested in how many employees are affected at this threshold.
+
+select count(*)
+from(select
+    concat(p.firstname,' ',p.lastname) as "Name",
+    e.emailaddress,
+    hr.jobtitle,
+    hr.vacationhours
+from
+    person.person as p
+join person.emailaddress as e on
+    e.businessentityid = p.businessentityid
+join humanresources.employee as hr on
+    p.businessentityid = hr.businessentityid
+where
+    p.persontype in ('SP', 'EM')
+    and hr.vacationhours > 40) as empl;
+
+
+-------------------------------------------------------
+
+Question 1
+The product team thinks it would be helpful to see similar products grouped together and to see the price ranges and number of products in each group.
+
+Price Ranges by Category
+
+The product team would like to know the price range for each product category in the catalog.
+
+This report should include:
+
+The lowest price per category.
+The highest price per category.
+The difference in cost between the highest and lowest priced items in each category.
+The name for each category.
+The number of products included in each category.
+
+
+select
+    --p.name as "Product", 
+  psubcat."name" as "Sub-category",
+  pcat."name" as "Category",
+  min(p.listprice) as "Lowest Price",
+  max(p.listprice) as "Max Price",
+  max(p.listprice) - min(p.listprice) as "Price Difference"
+from
+    production.productsubcategory as psubcat
+join production.productcategory as pcat on
+    pcat.productcategoryid = psubcat.productcategoryid
+join production.product as p on
+    psubcat.productsubcategoryid = p.productsubcategoryid
+GROUP BY
+    psubcat.name, pcat."name"--, p.name
+ORDER BY
+psubcat."name";
+
+-------------------------------------------------------
+
+Question 2
+At the very end of a meeting with the product team, a team member mentioned that they would like to see a count of products per price bracket. You would like to create an initial report considering all AdventureWorks products without bothering with categories or subcategories. There wasn't any guidance given as to what brackets should be considered.
+
+Count of Products per Price Bracket
+
+BRACKET 1:
+
+select
+    p."name" as "Product", 
+  p.listprice as "Price"
+from
+    production.productsubcategory as psubcat
+join production.productcategory as pcat on
+    pcat.productcategoryid = psubcat.productcategoryid
+join production.product as p on
+    psubcat.productsubcategoryid = p.productsubcategoryid
+where p.listprice <= 100
+  order by p.listprice
+;
+
+BRACKET 2:
+
+select
+    p."name" as "Product", 
+  p.listprice as "Price"
+from
+    production.productsubcategory as psubcat
+join production.productcategory as pcat on
+    pcat.productcategoryid = psubcat.productcategoryid
+join production.product as p on
+    psubcat.productsubcategoryid = p.productsubcategoryid
+where p.listprice > 100 and p.listprice <= 500 
+  order by p.listprice
+;
+
+BRACKET 3:
+
+select
+    p."name" as "Product", 
+  p.listprice as "Price"
+from
+    production.productsubcategory as psubcat
+join production.productcategory as pcat on
+    pcat.productcategoryid = psubcat.productcategoryid
+join production.product as p on
+    psubcat.productsubcategoryid = p.productsubcategoryid
+where p.listprice > 500 
+  order by p.listprice
+;
+-------------------------------------------------------
+
+Question 1
+Count of Shipped Orders & Subtotals by Month
+
+Prepare a report showing a monthly summary of the number of orders that have shipped and the subtotal (pre-tax and shipping) for the entire history of the company.
+
+This report should:
+
+Group orders by when they were placed.
+Only include orders that were shipped.
+Provide a monthly subtotal (not including tax and shipping)
+Be organized by year and then month
+Bonus:
+The sales department asks if you could create line graphs for Orders per Month and Subtotals per Month.
+
+SELECT
+    DATE_TRUNC('month', OrderDate) AS OrderMonth,
+    COUNT(*) AS ShippedOrdersCount,
+    SUM(SubTotal) AS MonthlySubtotal
+FROM
+    SalesOrderHeader
+GROUP BY
+    DATE_TRUNC('year', OrderDate),
+    DATE_TRUNC('month', OrderDate)
+ORDER BY
+    DATE_TRUNC('year', OrderDate),
+    DATE_TRUNC('month', OrderDate);
+
+-------------------------------------------------------
+
+
+
+-------------------------------------------------------
+
+
