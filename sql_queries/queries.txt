@@ -164,6 +164,36 @@ ORDER BY
     DATE_TRUNC('month', OrderDate);
 
 -------------------------------------------------------
+Question 2
+The sales team would like to see a report of how much each store that purchases from AdventureWorks has spent.
+
+This report should:
+
+    Include only orders that were shipped.
+    Include each store's name, customerid, and storeid
+    Include the total amount each store ordered (before tax and shipping).
+    Show the biggest spenders first.
+
+
+SELECT
+    c.CustomerID,
+    s.BusinessEntityID AS StoreID,
+    s.Name AS StoreName,
+    SUM(soh.SubTotal) AS TotalAmountOrdered
+FROM
+    SalesOrderHeader soh
+JOIN
+    Customer c ON soh.CustomerID = c.CustomerID
+JOIN
+    Store s ON c.StoreID = s.BusinessEntityID
+WHERE
+    soh.Status = 5 -- Shipped orders
+GROUP BY
+    c.CustomerID,
+    s.BusinessEntityID,
+    s.Name
+ORDER BY
+    TotalAmountOrdered DESC;
 
 
 
