@@ -1,6 +1,7 @@
 import pandas as pd
 import psycopg2
 from psycopg2 import OperationalError
+import pathlib
 import sqlalchemy
 #import pyodbc
 
@@ -45,8 +46,8 @@ def convert_sql_to_xlsx(sql_in, xlsx_out, xlsx_name=None):
         None
     """
     if xlsx_name is None:
-        xlsx_name = sql_in.split("/")[2].replace('.sql','')
-   
+        xlsx_name = sql_in.split("/")[1].replace('.sql','')
+        
     conn = create_connection()
     
     with open(sql_in, "r") as sql_file:
@@ -73,8 +74,15 @@ def convert_directory_of_queries(sql_in_dir, xlsx_out_dir):
     Returns:
         None
     """
-    for file in sql_in_dir:
-        convert_sql_to_xlsx(file, xlsx_out_dir)
+    directory = sql_in_dir
+ 
+    # iterate over files in
+    # that directory
+    for filename in os.scandir(directory):
+        if filename.is_file():
+            new_file = filename.path
+        convert_sql_to_xlsx(new_file, xlsx_out_dir)
+        #convert_sql_to_xlsx(file, xlsx_out_dir)
     
 
 def convert_sql_to_xlsx_from_cli():
@@ -85,6 +93,7 @@ def convert_sql_to_xlsx_from_cli():
 
 if __name__ == "__main__":
     print(POSTGRES_DATABASE)
-    convert_sql_to_xlsx("sql_queries/hr_q1.sql", "hr_q1")
+    #convert_sql_to_xlsx("sql_queries/hr_q1.sql", "hr_q1")
+    convert_directory_of_queries('sql_queries/', 'excel_reports/')
 
     

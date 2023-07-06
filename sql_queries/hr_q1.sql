@@ -11,4 +11,4 @@ join humanresources.employee as hr on
     p.businessentityid = hr.businessentityid
 where
     p.persontype in ('SP', 'EM')
-    and hr.vacationhours > 40;
+    and hr.vacationhours >= 40;
