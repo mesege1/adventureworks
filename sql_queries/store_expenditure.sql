@@ -4,11 +4,11 @@ SELECT
     s.Name AS StoreName,
     SUM(soh.SubTotal) AS TotalAmountOrdered
 FROM
-    SalesOrderHeader soh
+    sales.SalesOrderHeader soh
 JOIN
-    Customer c ON soh.CustomerID = c.CustomerID
+    sales.Customer c ON soh.CustomerID = c.CustomerID
 JOIN
-    Store s ON c.StoreID = s.BusinessEntityID
+    sales.Store s ON c.StoreID = s.BusinessEntityID
 WHERE
     soh.Status = 5 -- Shipped orders
 GROUP BY
