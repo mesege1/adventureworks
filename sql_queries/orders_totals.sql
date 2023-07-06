@@ -3,7 +3,7 @@ SELECT
     COUNT(*) AS ShippedOrdersCount,
     SUM(SubTotal) AS MonthlySubtotal
 FROM
-    SalesOrderHeader
+    sales.SalesOrderHeader
 GROUP BY
     DATE_TRUNC('year', OrderDate),
     DATE_TRUNC('month', OrderDate)

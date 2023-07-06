@@ -46,7 +46,7 @@ def convert_sql_to_xlsx(sql_in, xlsx_out, xlsx_name=None):
         None
     """
     if xlsx_name is None:
-        xlsx_name = sql_in.split("/")[1].replace('.sql','')
+        xlsx_name = sql_in.split("/")[-1].replace('.sql','')
         
     conn = create_connection()
     
