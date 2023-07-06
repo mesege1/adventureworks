@@ -31,7 +31,7 @@ def create_connection():
     return connection
 
 
-def convert_sql_to_xlsx(sql_in, xlsx_name=None):
+def convert_sql_to_xlsx(sql_in, xlsx_out, xlsx_name=None):
     """
     Runs query in given .sql file, stores result as .xlsx file.
 
@@ -45,7 +45,7 @@ def convert_sql_to_xlsx(sql_in, xlsx_name=None):
         None
     """
     if xlsx_name is None:
-        xlsx_name = sql_in.split(".")[0]
+        xlsx_name = sql_in.split("/")[2].replace('.sql','')
    
     conn = create_connection()
     
@@ -55,8 +55,7 @@ def convert_sql_to_xlsx(sql_in, xlsx_name=None):
     df = pd.read_sql_query(query, conn)
 
     conn.close()
-
-    return df.to_excel(f"excel_reports/{xlsx_name}.xlsx") 
+    return df.to_excel(f"{xlsx_out}/{xlsx_name}.xlsx") 
     
 
 def convert_directory_of_queries(sql_in_dir, xlsx_out_dir):
@@ -74,7 +73,9 @@ def convert_directory_of_queries(sql_in_dir, xlsx_out_dir):
     Returns:
         None
     """
-    pass
+    for file in sql_in_dir:
+        convert_sql_to_xlsx(file, xlsx_out_dir)
+    
 
 def convert_sql_to_xlsx_from_cli():
     """
@@ -84,4 +85,6 @@ def convert_sql_to_xlsx_from_cli():
 
 if __name__ == "__main__":
     print(POSTGRES_DATABASE)
-    convert_sql_to_xlsx("sql_queries/testing.sql", "testing")
+    convert_sql_to_xlsx("sql_queries/hr_q1.sql", "hr_q1")
+
+    
