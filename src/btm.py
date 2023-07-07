@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2 import OperationalError
 import pathlib
 import sqlalchemy
+import argparse
 #import pyodbc
 
 import os
@@ -89,11 +90,17 @@ def convert_sql_to_xlsx_from_cli():
     """
     Converts directory of sql queries to xlsx from CLI.
     """
-    pass
+    parser = argparse.ArgumentParser(description='converts a directory of sql files to xlxs files.')
+    parser.add_argument("-i", '--in_dir', help= 'a directory of sql queries')
+    parser.add_argument("-o", '--out_dir', help= 'a directory to store xlxs files')
+
+    args = parser.parse_args()
+
+    convert_directory_of_queries(args.in_dir, args.out_dir)
+    
 
 if __name__ == "__main__":
-    print(POSTGRES_DATABASE)
+    #print(POSTGRES_DATABASE)
     #convert_sql_to_xlsx("sql_queries/hr_q1.sql", "hr_q1")
-    convert_directory_of_queries('sql_queries/', 'excel_reports/')
-
-    
+    #convert_directory_of_queries('sql_queries/', 'excel_reports/')
+    convert_sql_to_xlsx_from_cli()
