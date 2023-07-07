@@ -97,6 +97,8 @@ def convert_sql_to_xlsx_from_cli():
     args = parser.parse_args()
 
     convert_directory_of_queries(args.in_dir, args.out_dir)
+
+    return None
     
 
 if __name__ == "__main__":
